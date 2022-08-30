@@ -1,18 +1,16 @@
-FROM library/centos:latest
-MAINTAINER Justin Garrison <justinleegarrison@gmail.com>
+FROM alpine:3.16.2
+MAINTAINER Sergio C <scarrascoh.develop@gmail.com>
 
-RUN yum -y update && \
-  yum install -y openssl openssl-devel nss-devel \
-  gmp-devel krb5-devel git @development
+RUN apk add --update --no-cache git gcc g++ make perl openssl openssl-dev nss-dev
 
-WORKDIR /root
+WORKDIR /opt
 
 RUN git clone https://github.com/magnumripper/JohnTheRipper.git
 
-WORKDIR JohnTheRipper/src
+WORKDIR /opt/JohnTheRipper/src
 
 RUN ./configure && make clean && make -s
 
-WORKDIR /root/JohnTheRipper/run
+WORKDIR /opt/JohnTheRipper/run
 
 ENTRYPOINT ["./john"]
